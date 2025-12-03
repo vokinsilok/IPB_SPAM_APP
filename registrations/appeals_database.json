@@ -1,0 +1,234 @@
+{
+  "appeals": [
+    {
+      "id": 1,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Екологія та природні ресурси",
+      "city": "Запоріжжя",
+      "screenshot_date": "10/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Екологія_та_природні_ресурси",
+      "created_at": "2025-12-03 21:47:28"
+    },
+    {
+      "id": 2,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Митна справа",
+      "city": "Запоріжжя",
+      "screenshot_date": "18/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Митна_справа",
+      "created_at": "2025-12-03 21:47:58"
+    },
+    {
+      "id": 3,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Діяльність посадових і службових осіб, корупція",
+      "city": "Запоріжжя",
+      "screenshot_date": "16/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Діяльність_посадових_і_службових_осіб_корупція",
+      "created_at": "2025-12-03 21:48:31"
+    },
+    {
+      "id": 4,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Діяльність громадських об'єднань, міжнаціональні та міжконфесійні відносини",
+      "city": "Запоріжжя",
+      "screenshot_date": "05/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Діяльність_громадських_об'єднань_міжнаціональні_та",
+      "created_at": "2025-12-03 21:49:06"
+    },
+    {
+      "id": 5,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Культура, мовна політика, туризм",
+      "city": "Запоріжжя",
+      "screenshot_date": "08/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Культура_мовна_політика_туризм",
+      "created_at": "2025-12-03 21:49:39"
+    },
+    {
+      "id": 6,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Дотримання законності, громадського порядку та протидія злочинності",
+      "city": "Запоріжжя",
+      "screenshot_date": "20/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Дотримання_законності_громадського_порядку_та_прот",
+      "created_at": "2025-12-03 21:50:14"
+    },
+    {
+      "id": 7,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Будівництво та благоустрій",
+      "city": "Запоріжжя",
+      "screenshot_date": "12/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Будівництво_та_благоустрій",
+      "created_at": "2025-12-03 21:50:48"
+    },
+    {
+      "id": 8,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Аграрна політика і земельні відносини",
+      "city": "Запоріжжя",
+      "screenshot_date": "07/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Аграрна_політика_і_земельні_відносини",
+      "created_at": "2025-12-03 21:51:20"
+    },
+    {
+      "id": 9,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Функціонування мереж зв'язку",
+      "city": "Запоріжжя",
+      "screenshot_date": "19/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Функціонування_мереж_зв'язку",
+      "created_at": "2025-12-03 21:51:52"
+    },
+    {
+      "id": 10,
+      "email": "watson2350@firemail.at",
+      "full_name": "Станіслав Станіславович Назар’єв",
+      "topic": "Діяльність підприємств та установ",
+      "city": "Запоріжжя",
+      "screenshot_date": "10/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Станіслав_Станіславович_Назар’єв\\Діяльність_підприємств_та_установ",
+      "created_at": "2025-12-03 21:52:30"
+    },
+    {
+      "id": 11,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Діяльність громадських об'єднань, міжнаціональні та міжконфесійні відносини",
+      "city": "Запоріжжя",
+      "screenshot_date": "15/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Діяльність_громадських_об'єднань_міжнаціональні_та",
+      "created_at": "2025-12-03 21:53:18"
+    },
+    {
+      "id": 12,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Охорона здоров'я",
+      "city": "Запоріжжя",
+      "screenshot_date": "15/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Охорона_здоров'я",
+      "created_at": "2025-12-03 21:53:54"
+    },
+    {
+      "id": 13,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Захист прав споживачів",
+      "city": "Запоріжжя",
+      "screenshot_date": "10/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Захист_прав_споживачів",
+      "created_at": "2025-12-03 21:54:28"
+    },
+    {
+      "id": 14,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Житлова політика",
+      "city": "Запоріжжя",
+      "screenshot_date": "03/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Житлова_політика",
+      "created_at": "2025-12-03 21:55:05"
+    },
+    {
+      "id": 15,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Діяльність посадових і службових осіб, корупція",
+      "city": "Запоріжжя",
+      "screenshot_date": "04/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Діяльність_посадових_і_службових_осіб_корупція",
+      "created_at": "2025-12-03 21:55:39"
+    },
+    {
+      "id": 16,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Умови праці та трудові відносини",
+      "city": "Запоріжжя",
+      "screenshot_date": "07/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Умови_праці_та_трудові_відносини",
+      "created_at": "2025-12-03 21:56:14"
+    },
+    {
+      "id": 17,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Освіта, наука та інтелектуальна власність",
+      "city": "Запоріжжя",
+      "screenshot_date": "08/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Освіта_наука_та_інтелектуальна_власність",
+      "created_at": "2025-12-03 21:56:47"
+    },
+    {
+      "id": 18,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Міждержавні відносини",
+      "city": "Запоріжжя",
+      "screenshot_date": "20/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Міждержавні_відносини",
+      "created_at": "2025-12-03 21:57:15"
+    },
+    {
+      "id": 19,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Екологія та природні ресурси",
+      "city": "Запоріжжя",
+      "screenshot_date": "17/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Екологія_та_природні_ресурси",
+      "created_at": "2025-12-03 21:57:46"
+    },
+    {
+      "id": 20,
+      "email": "watson4812@firemail.eu",
+      "full_name": "Антон Геннадійович Нагорний",
+      "topic": "Дотримання законності, громадського порядку та протидія злочинності",
+      "city": "Запоріжжя",
+      "screenshot_date": "09/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Антон_Геннадійович_Нагорний\\Дотримання_законності_громадського_порядку_та_прот",
+      "created_at": "2025-12-03 21:58:21"
+    },
+    {
+      "id": 21,
+      "email": "watson8743@firemail.de",
+      "full_name": "Дмитро Іванович Назаренко",
+      "topic": "Охорона здоров'я",
+      "city": "Запоріжжя",
+      "screenshot_date": "09/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Дмитро_Іванович_Назаренко\\Охорона_здоров'я",
+      "created_at": "2025-12-03 21:59:07"
+    },
+    {
+      "id": 22,
+      "email": "watson8743@firemail.de",
+      "full_name": "Дмитро Іванович Назаренко",
+      "topic": "Діяльність посадових і службових осіб, корупція",
+      "city": "Запоріжжя",
+      "screenshot_date": "13/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Дмитро_Іванович_Назаренко\\Діяльність_посадових_і_службових_осіб_корупція",
+      "created_at": "2025-12-03 21:59:44"
+    },
+    {
+      "id": 23,
+      "email": "watson8743@firemail.de",
+      "full_name": "Дмитро Іванович Назаренко",
+      "topic": "Архіви та статистика",
+      "city": "Запоріжжя",
+      "screenshot_date": "04/12/2025",
+      "appeal_dir": "E:\\PycharmProjects\\IPB_SPAM_APP\\appeals\\Дмитро_Іванович_Назаренко\\Архіви_та_статистика",
+      "created_at": "2025-12-03 22:00:16"
+    }
+  ]
+}
