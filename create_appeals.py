@@ -771,49 +771,44 @@ async def main():
         profile_dir = BASE_DIR / "browser_profiles" / "appeals_profile"
         profile_dir.mkdir(parents=True, exist_ok=True)
         
-        # Запускаем браузер с новым профилем
-        browser = await p.chromium.launch(
-            headless=False,
-            args=[
-                f'--user-data-dir={profile_dir}',
-                '--disable-blink-features=AutomationControlled',
-                '--disable-dev-shm-usage',
-                '--no-sandbox'
-            ]
-        )
-        
-        # Создаём временный контекст для проверки прокси
+        # Сначала запускаем временный браузер для проверки прокси
         logger.info("")
         logger.info("Поиск рабочего прокси для gov.ua...")
-        temp_context = await browser.new_context()
+        temp_browser = await p.chromium.launch(headless=False)
+        temp_context = await temp_browser.new_context()
         temp_page = await temp_context.new_page()
         
         # Ищем рабочий прокси
         working_proxy = await find_working_proxy(temp_page)
         await temp_page.close()
         await temp_context.close()
+        await temp_browser.close()
         
         if not working_proxy:
             logger.error("✗ Не найден рабочий прокси для gov.ua!")
             logger.error("Добавьте больше прокси в proxy_config.py")
-            await browser.close()
             return
         
-        # Создаём контекст с найденным прокси
+        # Запускаем браузер с профилем и найденным прокси
         proxy_config = format_proxy_for_playwright(working_proxy)
-        context_options = {
-            'proxy': proxy_config,
-            'locale': 'uk-UA',
-            'color_scheme': 'light',
-            'viewport': {'width': 1920, 'height': 1080},
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'timezone_id': 'Europe/Kiev'
-        }
-        
         logger.info(f"✓ Используется прокси: {working_proxy['name']} ({working_proxy['server']})")
         
-        context = await browser.new_context(**context_options)
-        page = await context.new_page()
+        context = await p.chromium.launch_persistent_context(
+            user_data_dir=str(profile_dir),
+            headless=False,
+            proxy=proxy_config,
+            locale='uk-UA',
+            color_scheme='light',
+            viewport={'width': 1920, 'height': 1080},
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            timezone_id='Europe/Kiev',
+            args=[
+                '--disable-blink-features=AutomationControlled',
+                '--disable-dev-shm-usage',
+                '--no-sandbox'
+            ]
+        )
+        page = context.pages[0] if context.pages else await context.new_page()
         
         # Обработка каждого аккаунта
         for idx, account in enumerate(ukc_accounts, start=1):
@@ -838,7 +833,7 @@ async def main():
         # Выводим статистику использования прокси
         print_proxy_stats()
         
-        await browser.close()
+        await context.close()
         input("\nНажмите Enter для завершения...")
 
 
