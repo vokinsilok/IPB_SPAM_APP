@@ -12,6 +12,12 @@ import subprocess
 import time
 import requests
 from playwright.async_api import async_playwright, Page
+from proxy_config import (
+    find_working_proxy,
+    format_proxy_for_playwright,
+    log_proxy_usage,
+    print_proxy_stats
+)
 # Email confirmation отключен - требуется ручное подтверждение
 
 # Настройка логирования
@@ -48,6 +54,9 @@ DEFAULT_PHONE = '979509573'
 
 # Задержка перед стартом сценария (секунды)
 START_DELAY_SECONDS = 12
+
+# Настройки прокси перенесены в proxy_config.py
+# Используется автоматический поиск рабочего прокси
 
 
 def generate_password(length=16):
@@ -643,8 +652,8 @@ async def main(count=None):
     logger.info("=" * 80)
     
     # Загрузка данных
-    logger.info(f"Загрузка данных из: {INPUT_CSV}")
-    people = load_people_from_csv(INPUT_CSV)
+    logger.info(f"Загрузка данных из: {PEOPLES_CSV}")
+    people = load_people_from_csv(PEOPLES_CSV)
     logger.info(f"Загружено персон: {len(people)}")
     
     # Загрузка Firemail аккаунтов
@@ -668,62 +677,55 @@ async def main(count=None):
         logger.warning(f"⚠ Недостаточно Firemail аккаунтов! Нужно: {len(people)}, есть: {len(firemail_accounts)}")
         people = people[:len(firemail_accounts)]
     
-    # Проверка и запуск Chrome (без закрытия старых окон)
-    logger.info("Проверка Chrome с remote debugging...")
+    # Запуск браузера с прокси и новым профилем
+    logger.info("Запуск браузера с проверкой прокси...")
     
-    chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-    chrome_args = [
-        chrome_path,
-        "--remote-debugging-port=9222",
-        "--user-data-dir=C:\\chrome-debug-profile"
-    ]
-    
-    chrome_running = False
-    try:
-        response = requests.get("http://127.0.0.1:9222/json", timeout=1)
-        if response.status_code == 200:
-            chrome_running = True
-            logger.info("✓ Chrome уже запущен с remote debugging")
-    except:
-        pass
-    
-    if not chrome_running:
-        logger.info("Запуск Chrome с remote debugging...")
-        subprocess.Popen(chrome_args)
-        
-        # Ждём запуска Chrome
-        logger.info("Ожидание запуска Chrome...")
-        for i in range(15):
-            try:
-                response = requests.get("http://127.0.0.1:9222/json", timeout=1)
-                if response.status_code == 200:
-                    logger.info("✓ Chrome запущен!")
-                    break
-            except:
-                pass
-            time.sleep(1)
-        else:
-            logger.error("✗ Chrome не запустился")
-            return
-    else:
-        # Chrome уже запущен - открываем новое окно
-        logger.info("Открываю новое окно Chrome...")
-        subprocess.Popen([chrome_path, "--new-window", "about:blank"])
-        time.sleep(2)
-    
-    # Подключение к Chrome через CDP
+    # Подключение к браузеру через Playwright
     async with async_playwright() as p:
-        browser = await p.chromium.connect_over_cdp("http://127.0.0.1:9222")
+        # Создаём уникальную директорию для профиля браузера
+        profile_dir = BASE_DIR / "browser_profiles" / "registration_profile"
+        profile_dir.mkdir(parents=True, exist_ok=True)
         
-        # Создание контекста БЕЗ прокси (для UKC прокси не нужны)
+        # Запускаем браузер с новым профилем
+        browser = await p.chromium.launch(
+            headless=False,
+            args=[
+                f'--user-data-dir={profile_dir}',
+                '--disable-blink-features=AutomationControlled',
+                '--disable-dev-shm-usage',
+                '--no-sandbox'
+            ]
+        )
+        
+        # Создаём временный контекст для проверки прокси
+        logger.info("")
+        logger.info("Поиск рабочего прокси для gov.ua...")
+        temp_context = await browser.new_context()
+        temp_page = await temp_context.new_page()
+        
+        # Ищем рабочий прокси
+        working_proxy = await find_working_proxy(temp_page)
+        await temp_page.close()
+        await temp_context.close()
+        
+        if not working_proxy:
+            logger.error("✗ Не найден рабочий прокси для gov.ua!")
+            logger.error("Добавьте больше прокси в proxy_config.py")
+            await browser.close()
+            return
+        
+        # Создаём контекст с найденным прокси
+        proxy_config = format_proxy_for_playwright(working_proxy)
         context_options = {
+            'proxy': proxy_config,
             'locale': 'uk-UA',
             'color_scheme': 'light',
             'viewport': {'width': 1920, 'height': 1080},
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'timezone_id': 'Europe/Kiev'
         }
         
-        logger.info("✓ Работа БЕЗ прокси (прямое подключение)")
+        logger.info(f"✓ Используется прокси: {working_proxy['name']} ({working_proxy['server']})")
         
         # Создаём контекст
         context = await browser.new_context(**context_options)
@@ -809,8 +811,12 @@ async def main(count=None):
             logger.info(f"Результаты: {output_file}")
         else:
             logger.info("Нет успешных регистраций для сохранения")
-        logger.info("=" * 80)
+        logger.info("="*80)
         
+        # Выводим статистику использования прокси
+        print_proxy_stats()
+        
+        await browser.close()
         input("\nНажмите Enter для завершения...")
 
 

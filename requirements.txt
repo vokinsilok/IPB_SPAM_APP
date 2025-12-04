@@ -1,4 +1,11 @@
+certifi==2025.11.12
+charset-normalizer==3.4.4
+greenlet==3.0.1
+idna==3.11
+lxml==6.0.2
 playwright==1.40.0
-requests==2.31.0
+pyee==11.0.1
 python-docx==1.1.0
-# email работает через встроенный imaplib - дополнительных зависимостей не требуется
+requests==2.32.4
+typing_extensions==4.15.0
+urllib3==2.5.0
