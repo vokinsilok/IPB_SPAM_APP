@@ -19,6 +19,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from proxy_config import (
     USE_PROXY,
+    HEADLESS_MODE,
     find_working_proxy,
     format_proxy_for_playwright,
     log_proxy_usage,
@@ -781,7 +782,7 @@ async def main():
         if USE_PROXY:
             logger.info("")
             logger.info("Поиск рабочего прокси для gov.ua...")
-            temp_browser = await p.chromium.launch(headless=False)
+            temp_browser = await p.chromium.launch(headless=HEADLESS_MODE)
             temp_context = await temp_browser.new_context()
             temp_page = await temp_context.new_page()
             
@@ -804,7 +805,7 @@ async def main():
         # Запускаем браузер с профилем
         context_params = {
             'user_data_dir': str(profile_dir),
-            'headless': False,
+            'headless': HEADLESS_MODE,
             'locale': 'uk-UA',
             'color_scheme': 'light',
             'viewport': {'width': 1920, 'height': 1080},
