@@ -370,29 +370,11 @@ async def login_to_ukc(page: Page, email: str, password: str):
         return False
 
 
-async def create_appeal(page: Page, topic: str, city: str, appeal_text: str):
-    """Создание обращения на портале"""
-    logger.info(f"Создаю обращение: {topic}")
+async def fill_appeal_form(page: Page, topic: str, city: str, appeal_text: str):
+    """Заполнение уже открытой формы создания обращения"""
+    logger.info(f"Заполняю форму обращения: {topic}")
     
     try:
-        # Переходим на страницу портала если не там
-        if "portal/appeals" not in page.url:
-            await page.goto("https://ukc.gov.ua/portal/", timeout=30000)
-            await asyncio.sleep(1)
-        
-        # Нажимаем на кнопку создания обращения (несколько вариантов селекторов)
-        logger.info("Нажимаю кнопку создания обращения...")
-        try:
-            # Пробуем разные селекторы
-            create_button = page.locator('a[href*="/portal/appeals/create"], button:has-text("Створити звернення"), .section__btn a').first
-            await create_button.click(timeout=10000)
-            logger.info("✓ Кнопка создания обращения нажата")
-        except Exception as e:
-            logger.warning(f"⚠ Не удалось найти кнопку создания обращения стандартным способом: {e}")
-            # Пробуем CSS селектор из задания
-            await page.click("#root > div > div > section:nth-child(2) > div > div.section__btn > a", timeout=10000)
-        
-        await asyncio.sleep(1)
         
         # Выбираем тему из выпадающего списка (rc-tree-select)
         logger.info("Выбираю тему обращения...")
@@ -689,7 +671,38 @@ async def process_account(page: Page, context, account: dict, peoples_data: dict
         
         used_topics.add(topic)
         
-        # Генерируем текст обращения
+        # Сначала открываем форму создания обращения
+        logger.info(f"Открываю форму создания обращения для темы: {topic}")
+        
+        try:
+            # Переходим на страницу портала если не там
+            if "portal/appeals" not in page.url:
+                await page.goto("https://ukc.gov.ua/portal/", timeout=30000)
+                await asyncio.sleep(1)
+            
+            # Нажимаем на кнопку создания обращения
+            logger.info("Нажимаю кнопку создания обращения...")
+            try:
+                create_button = page.locator('a[href*="/portal/appeals/create"], button:has-text("Створити звернення"), .section__btn a').first
+                await create_button.click(timeout=10000)
+                logger.info("✓ Форма создания обращения открыта")
+            except Exception as e:
+                logger.warning(f"⚠ Не удалось найти кнопку создания обращения стандартным способом: {e}")
+                try:
+                    await page.click("#root > div > div > section:nth-child(2) > div > div.section__btn > a", timeout=10000)
+                    logger.info("✓ Форма создания обращения открыта (альтернативный способ)")
+                except Exception as e2:
+                    logger.error(f"✗ Не удалось открыть форму создания обращения: {e2}")
+                    continue
+            
+            await asyncio.sleep(2)
+            
+        except Exception as e:
+            logger.error(f"✗ Ошибка при открытии формы: {e}")
+            continue
+        
+        # Теперь генерируем текст обращения (форма уже открыта)
+        logger.info(f"Генерирую текст обращения на тему: {topic}")
         russian_text, ukrainian_text = await generate_appeal_text(topic, person_data)
         if not ukrainian_text:
             logger.error("✗ Не удалось сгенерировать текст обращения")
@@ -705,9 +718,9 @@ async def process_account(page: Page, context, account: dict, peoples_data: dict
         save_appeal_to_docx(russian_text, "ru", full_name, topic, appeal_dir)
         save_appeal_to_docx(ukrainian_text, "uk", full_name, topic, appeal_dir)
         
-        # Создаем обращение на портале
-        if not await create_appeal(page, topic, city, ukrainian_text):
-            logger.error("✗ Не удалось создать обращение на портале")
+        # Заполняем форму обращения (форма уже открыта, кнопку не нажимаем)
+        if not await fill_appeal_form(page, topic, city, ukrainian_text):
+            logger.error("✗ Не удалось заполнить форму обращения")
             continue
         
         # Ожидаем распределения (но делаем скриншот в любом случае)
