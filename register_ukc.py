@@ -13,6 +13,7 @@ import time
 import requests
 from playwright.async_api import async_playwright, Page
 from proxy_config import (
+    USE_PROXY,
     find_working_proxy,
     format_proxy_for_playwright,
     log_proxy_usage,
@@ -677,8 +678,11 @@ async def main(count=None):
         logger.warning(f"⚠ Недостаточно Firemail аккаунтов! Нужно: {len(people)}, есть: {len(firemail_accounts)}")
         people = people[:len(firemail_accounts)]
     
-    # Запуск браузера с прокси и новым профилем
-    logger.info("Запуск браузера с проверкой прокси...")
+    # Запуск браузера с прокси или без него
+    if USE_PROXY:
+        logger.info("Запуск браузера с проверкой прокси...")
+    else:
+        logger.info("Запуск браузера БЕЗ прокси...")
     
     # Подключение к браузеру через Playwright
     async with async_playwright() as p:
@@ -686,43 +690,53 @@ async def main(count=None):
         profile_dir = BASE_DIR / "browser_profiles" / "registration_profile"
         profile_dir.mkdir(parents=True, exist_ok=True)
         
-        # Сначала запускаем временный браузер для проверки прокси
-        logger.info("")
-        logger.info("Поиск рабочего прокси для gov.ua...")
-        temp_browser = await p.chromium.launch(headless=False)
-        temp_context = await temp_browser.new_context()
-        temp_page = await temp_context.new_page()
+        proxy_config = None
         
-        # Ищем рабочий прокси
-        working_proxy = await find_working_proxy(temp_page)
-        await temp_page.close()
-        await temp_context.close()
-        await temp_browser.close()
+        # Если включены прокси - ищем рабочий
+        if USE_PROXY:
+            logger.info("")
+            logger.info("Поиск рабочего прокси для gov.ua...")
+            temp_browser = await p.chromium.launch(headless=False)
+            temp_context = await temp_browser.new_context()
+            temp_page = await temp_context.new_page()
+            
+            # Ищем рабочий прокси
+            working_proxy = await find_working_proxy(temp_page)
+            await temp_page.close()
+            await temp_context.close()
+            await temp_browser.close()
+            
+            if not working_proxy:
+                logger.error("✗ Не найден рабочий прокси для gov.ua!")
+                logger.error("Добавьте больше прокси в proxy_config.py или отключите USE_PROXY")
+                return
+            
+            proxy_config = format_proxy_for_playwright(working_proxy)
+            logger.info(f"✓ Используется прокси: {working_proxy['name']} ({working_proxy['server']})")
+        else:
+            logger.info("✓ Работа БЕЗ прокси (прямое подключение)")
         
-        if not working_proxy:
-            logger.error("✗ Не найден рабочий прокси для gov.ua!")
-            logger.error("Добавьте больше прокси в proxy_config.py")
-            return
-        
-        # Запускаем браузер с профилем и найденным прокси
-        proxy_config = format_proxy_for_playwright(working_proxy)
-        logger.info(f"✓ Используется прокси: {working_proxy['name']} ({working_proxy['server']})")
-        
-        context = await p.chromium.launch_persistent_context(
-            user_data_dir=str(profile_dir),
-            headless=False,
-            proxy=proxy_config,
-            locale='uk-UA',
-            color_scheme='light',
-            viewport={'width': 1920, 'height': 1080},
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            timezone_id='Europe/Kiev',
-            args=[
+        # Запускаем браузер с профилем
+        context_params = {
+            'user_data_dir': str(profile_dir),
+            'headless': False,
+            'locale': 'uk-UA',
+            'color_scheme': 'light',
+            'viewport': {'width': 1920, 'height': 1080},
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'timezone_id': 'Europe/Kiev',
+            'args': [
                 '--disable-blink-features=AutomationControlled',
                 '--disable-dev-shm-usage',
                 '--no-sandbox'
             ]
-        )
+        }
+        
+        # Добавляем прокси только если он найден
+        if proxy_config:
+            context_params['proxy'] = proxy_config
+        
+        context = await p.chromium.launch_persistent_context(**context_params)
         page = context.pages[0] if context.pages else await context.new_page()
         
         results = []
